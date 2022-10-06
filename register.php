@@ -1,3 +1,41 @@
+<?php 
+require_once("constants.php"); 
+?>
+<?php
+	
+	if(isset($_POST["register"])){
+	
+	if(!empty($_POST['firstname']) && !empty($_POST['surnname']) && !empty($_POST['email']) && !empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['number'])) {
+  $firstname= htmlspecialchars($_POST['firstname']);
+  $surnname= htmlspecialchars($_POST['surname']);
+	$email=htmlspecialchars($_POST['email']);
+ $username=htmlspecialchars($_POST['username']);
+ $password=htmlspecialchars($_POST['password']);
+ $number=htmlspecialchars($_POST['number']);
+ $query=mysql_query("SELECT * FROM usertbl WHEREusername='".$username."'");
+  $numrows=mysql_num_rows($query);
+if($numrows==0)
+   {
+	$sql="INSERT INTO usertbl
+  (firstname, surname, email, username, password, number)
+	VALUES('$firstname',$surname','$email', '$username', '$password', '$')";
+  $result=mysql_query($sql);
+ if($result){
+	$message = "Account Successfully Created";
+} else {
+ $message = "Failed to insert data information!";
+  }
+	} else {
+	$message = "That username already exists! Please try another one!";
+   }
+	} else {
+	$message = "All fields are required!";
+	}
+	}
+	?>
+
+	<?php if (!empty($message)) {echo "<p class="error">" . "MESSAGE: ". $message . "</p>";} ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -28,6 +66,27 @@
     </style>
   </head>
   <body>
+    <div>
+      <?php
+      if(isset($_POST['create'])){
+
+        $firstname = $_POST['firstname'];
+        $lastname = $_POST['lastname'];
+        $email = $_POST['email'];
+        $phone = $_POST['phone'];
+        $password = $_POST['password'];
+
+        $sql = "INSERT INTO users (firstname, lastname, email, phone, password) VALUES(?, ?, ?, ?, ?)";
+        $stmtinsert = $db->prepare($sql);
+        $result = $stmtinsert->execute([$firstname, $lastname, $email, $phone, $password])
+        if($result) {
+          echo 'Successfule saved';
+        } else {
+          echo 'There were errors saving the data'
+        }
+      }
+      ?>
+    </div>
     <div class="container">
       <div class="form">
         <div class="form-login">
@@ -35,7 +94,7 @@
           <div class="input">
             <form action="#">
               <div class="input-field">
-                <input type="text" placeholder="Enter your name" reguired />
+                <input type="text" placeholder="Enter your name" class="firstname" reguired />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -50,7 +109,7 @@
                 </svg>
               </div>
               <div class="input-field">
-                <input type="text" placeholder="Enter your surname" reguired />
+                <input type="text" placeholder="Enter your surname" class="surname" reguired />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -65,7 +124,7 @@
                 </svg>
               </div>
               <div class="input-field">
-                <input type="text" placeholder="Enter your username" reguired />
+                <input type="text" placeholder="Enter your username" class="username" reguired />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -80,7 +139,7 @@
                 </svg>
               </div>
               <div class="input-field">
-                <input type="text" placeholder="Enter your email" reguired />
+                <input type="text" placeholder="Enter your email" class="email" reguired />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -95,7 +154,7 @@
                 </svg>
               </div>
               <div class="input-field">
-                <input type="text" placeholder="Enter your password" reguired />
+                <input type="text" placeholder="Enter your password" class="password" reguired />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -113,6 +172,7 @@
                 <input
                   type="text"
                   placeholder="Confirm your password"
+                  class="password"
                   reguired
                 />
                 <svg
@@ -133,6 +193,7 @@
                   type="tel"
                   id="phone"
                   name="phone"
+                  class="phone"
                   pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                   placeholder="Enter your phone number"
                   required
@@ -153,7 +214,7 @@
                 <small>Format: 123-456-789</small>
               </div>
               <div class="input-field">
-                <input type="file" id="myFile" name="filename" />
+                <input type="file" id="myFile" name="filename" class="photo" />
               </div>
               <div class="button">
                 <input type="button" value="Register" required />

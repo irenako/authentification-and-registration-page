@@ -1,3 +1,12 @@
+
+<?php
+
+session_start();
+
+if(!isset($_SESSION["session_username"])):
+header("location:index.php");
+else:
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -35,7 +44,7 @@
   <body>
     <div class="container">
       <div class="title">
-        Welcome! You are succesfully log in! 
+        Welcome <span><?php echo $_SESSION['session_username'];?>! </span>! You are succesfully log in! 
       </div>
       <div class="login-signup">
               <span class="text">
@@ -43,5 +52,6 @@
               </span>
             </div>
     </div>
+    <?php endif; ?>
   </body>
 </html>

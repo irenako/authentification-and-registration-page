@@ -1,3 +1,43 @@
+<?php
+	session_start();
+	?>
+
+	<?php require_once("includes/connection.php"); ?> 
+	<?php
+	
+	if(isset($_SESSION["session_username"])){
+	header("Location: intropage.php");
+	}
+
+	if(isset($_POST["login"])){
+
+	if(!empty($_POST['username']) && !empty($_POST['password'])) {
+	$username=htmlspecialchars($_POST['username']);
+	$password=htmlspecialchars($_POST['password']);
+	$query =mysql_query("SELECT * FROM usertbl WHEREusername='".$username."' AND password='".$password."'");
+	$numrows=mysql_num_rows($query);
+	if($numrows!=0)
+ {
+while($row=mysql_fetch_assoc($query))
+ {
+	$dbusername=$row['username'];
+  $dbpassword=$row['password'];
+ }
+  if($username == $dbusername && $password == $dbpassword)
+ {
+	 $_SESSION['session_username']=$username;	 
+   header("Location: intropag.php");
+	}
+	} else {
+
+	
+	echo  "Invalid username or password!";
+ }
+	} else {
+    $message = "All fields are required!";
+	}
+	}
+	?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -30,7 +70,7 @@
           <div class="input">
             <form action="#">
               <div class="input-field">
-                <input type="text" placeholder="Enter your email" reguired />
+                <input type="text" placeholder="Enter your email" class="email" reguired />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -45,7 +85,7 @@
                 </svg>
               </div>
               <div class="input-field">
-                <input type="text" placeholder="Enter your password" reguired />
+                <input type="text" placeholder="Enter your password"  class="password" reguired />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
